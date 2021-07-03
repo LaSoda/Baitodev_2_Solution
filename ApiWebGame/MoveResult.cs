@@ -7,7 +7,7 @@ namespace ApiWebGame
 {
     public class MoveResult
     {
-        public int wordPosition { get; set; }
+        public List<int> wordPosition { get; set; }
         public Boolean isCorrect { get; set; }
         public Boolean isWin { get; set; }
 

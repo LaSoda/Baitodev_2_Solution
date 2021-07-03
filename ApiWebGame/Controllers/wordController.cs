@@ -34,42 +34,48 @@ namespace ApiWebGame.Controllers
                 jsonResult = new SelectedWord() { wordLenght = Words[0].Length };
             }
             var json = new JavaScriptSerializer().Serialize(jsonResult);
-            return Ok(json);
+            
+            return Ok($"[{json}]");
         }
 
         [HttpGet("{numero}/{palabra}")]
         public IActionResult Get(int numero,String palabra)
         {
             var jsonResult = new MoveResult();
-
+            List<int> Position = new List<int>();
             if (palabra.Length>1)
             {
                 if (palabra.Equals(Words[numero]))
                 {
-                     jsonResult = new MoveResult() { wordPosition = 0, isCorrect = true, isWin = true };
-                    
+                    for (int i = 0; i < palabra.Length; i++)
+                    {
+                        Position.Add(i);
+                    }
+                    jsonResult = new MoveResult() { wordPosition = Position, isCorrect = true, isWin = true };
+
                 }
                 else
                 {
-                    jsonResult = new MoveResult() { wordPosition = -1, isCorrect = false, isWin = false };
+                    jsonResult = new MoveResult() { wordPosition = Position, isCorrect = false, isWin = false };
                 }
 
             }
             else
             {
-                jsonResult = new MoveResult() { wordPosition = -1, isCorrect = false, isWin = false };
-                
+                jsonResult = new MoveResult() { wordPosition = Position, isCorrect = false, isWin = false };
+
                 for (int i = 0; i < Words[numero].Length; i++)
                 {
                     if (Words[numero].ToCharArray()[i].ToString().Equals(palabra))
                     {
-                        jsonResult = new MoveResult() { wordPosition = i, isCorrect = true, isWin = false };
-                        break;
+                        Position.Add(i);
+                        jsonResult = new MoveResult() { wordPosition = Position, isCorrect = true, isWin = false };
+                        
                     }
                 }
             }
             var json = new JavaScriptSerializer().Serialize(jsonResult);
-            return Ok(json);
+            return Ok($"[{json}]");
         }
     }
 }
